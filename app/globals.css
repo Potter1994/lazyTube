@@ -3,13 +3,43 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  --bg-color: #ffffff;
+  --text-color: #0f0f0f;
+  --secondary-text: #606060;
+  --border-color: #ddd;
+  --link-color: #065fd4;
+  --card-bg: #f9f9f9;
+  --hover-bg: #f1f1f1;
 }
 
+.dark {
+  --background: #0f0f0f;
+  --foreground: #ffffff;
+
+  --bg-color: #0f0f0f;
+  --text-color: #ffffff;
+  --secondary-text: #aaaaaa;
+  --border-color: #303030;
+  --link-color: #3ea6ff;
+  --card-bg: #1f1f1f;
+  --hover-bg: #272727;
+}
+
+/* 寫在這邊就不用去到 tailwind.config.ts 中拓展名稱了 */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-bg-color: var(--bg-color);
+  --color-text-color: var(--text-color);
+  --color-secondary-text: var(--secondary-text);
+  --color-border-color: var(--border-color);
+  --color-link-color: var(--link-color);
+  --color-card-bg: var(--card-bg);
+  --color-hover-bg: var(--hover-bg);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --spacing-8xl: 90rem;
 }
 
 @media (prefers-color-scheme: dark) {
