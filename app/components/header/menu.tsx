@@ -29,7 +29,11 @@ function Menu() {
   const [darkMode, setDarkMode] = useState(true);
   return (
     <div className='flex'>
-      <button className='login border-3 border-border-color px-4 mr-4 bg-card-bg rounded-4xl cursor-pointer hover:bg-hover-bg active:bg-card-bg'>
+      <button
+        onClick={() => {
+          window.location.href = "/api/login";
+        }}
+        className='login border-3 border-border-color px-4 mr-4 bg-card-bg rounded-4xl cursor-pointer hover:bg-hover-bg active:bg-card-bg'>
         Login
       </button>
 
