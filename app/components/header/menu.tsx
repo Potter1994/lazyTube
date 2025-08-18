@@ -31,7 +31,17 @@ function Menu() {
     <div className='flex'>
       <button
         onClick={() => {
-          window.location.href = "/api/login";
+          const width = 500;
+          const height = 600;
+          const left = window.screen.width / 2 - width / 2;
+          const top = window.screen.height / 2 - height / 2;
+          const popup = window.open(
+            "/api/login",
+            "Google Login",
+            `width=${width},height=${height},top=${top},left=${left}`
+          );
+          console.log(popup);
+          // window.location.href = "/api/login";
         }}
         className='login border-3 border-border-color px-4 mr-4 bg-card-bg rounded-4xl cursor-pointer hover:bg-hover-bg active:bg-card-bg'>
         Login

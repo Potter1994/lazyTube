@@ -1,13 +1,9 @@
-import Header from "./components/header/header";
-import PlayList from "./components/youtube/playList";
-// import Login from "./components/login/login";
+// import PlayList from "./components/youtube/play-list";
 
-export default function Home() {
+export default async function Home() {
   return (
     <div>
-      <Header />
-      {/* <Login /> */}
-      <PlayList />
+      {/* <PlayList /> */}
       {/* <iframe
         width='560'
         height='315'
