@@ -1,13 +1,19 @@
-// import PlayList from "./components/youtube/play-list";
+"use client";
+import PlayList from "@/app/components/youtube/play-list";
 
-export default async function Home() {
+import { useYoutubeStore } from "./hook/useYoutubeStore";
+
+export default function Home() {
+  const searchResult = useYoutubeStore((state) => state.searchResult);
+  // const videoId = searchResult.items[1].id!.videoId;
+  // console.log(searchResult.items[1].id!.videoId);
   return (
     <div>
-      {/* <PlayList /> */}
+      <PlayList list={searchResult.items} />
       {/* <iframe
-        width='560'
-        height='315'
-        src={`https://www.youtube.com/embed/Zbrw-_vK2Es`}
+        width='430'
+        height='244'
+        src={`https://www.youtube.com/embed/${videoId}`}
         title='YouTube video player'
         frameBorder='0'
         allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'

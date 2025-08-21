@@ -1,25 +1,15 @@
 "use client";
+import { YoutubeType } from "@/app/hook/useYoutubeStore";
 import React from "react";
-// import YoutubePlayer from "./youtubePlayer";
-// import { getPlayList } from "@/app/lib/action";
+import YoutubePlayer from "./youtubePlayer";
 
-function PlayList() {
-  // const [youtubeList, setYoutubeList] = useState([]);
-  // useEffect(() => {
-  //   fetch("/api/youtube/videos")
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       console.log(res);
-  //       setYoutubeList(res.items);
-  //     });
-  // }, []);
-
-  // console.log(youtubeList);
+function PlayList({ list }: { list: YoutubeType[] }) {
+  console.log(list);
 
   return (
-    <div className='mx-auto w-fit'>
-      {/* {youtubeList?.length &&
-        youtubeList.map((i) => <YoutubePlayer key={i.id} id={i.id} />)} */}
+    <div className='mx-auto grid grid-cols-4'>
+      {!!list?.length &&
+        list.map((i: YoutubeType) => <YoutubePlayer key={i.etag} info={i} />)}
     </div>
   );
 }

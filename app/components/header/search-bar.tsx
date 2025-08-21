@@ -5,15 +5,13 @@ import { searchVideoList } from "@/app/lib/action";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 function SearchBar() {
-  const { list, addList } = useYoutubeStore((state) => state);
-  // console.log(list);
+  const setSearchResult = useYoutubeStore((state) => state.setSearchResult);
   return (
     <form
       onSubmit={async (e) => {
         e.preventDefault();
         const result = await searchVideoList(new FormData(e.currentTarget));
-        // addList(["test"]);
-        console.log(result);
+        setSearchResult(result);
       }}
       className='max-w-[640px] w-full h-10 flex'>
       <input

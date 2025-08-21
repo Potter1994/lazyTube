@@ -1,26 +1,36 @@
 import { create } from 'zustand'
 
-type YoutubeType = {
+export type YoutubeType = {
   etag?: string,
-  id?: { kind: string, channelId: string },
+  id?: { kind: string, channelId?: string, videoId?: string },
   kind?: string,
-  snippet?: Record<string, unknown>
+  snippet?: Record<string, string | object>
 }
 
-type YoutubeStore = YoutubeType & {
-  items: string[],
+type SearchList = {
+  etag: string,
+  items: YoutubeType[],
+  kind: string,
   nextPageToken: string,
   pageInfo?: { totalResults: number, resultsPerPage: number },
   regionCode: string,
 }
 
-type YoutubeAction = {
-  addList: (data: string[]) => void
+type State = YoutubeType & {
+  searchResult: SearchList,
 }
 
-export const useYoutubeStore = create<YoutubeStore & YoutubeAction>((set) => ({
-  items: [],
-  nextPageToken: '',
-  regionCode: '',
-  addList: (data) => set(state => ({ ...state, list: [...state.items, ...data] }))
+type Actions = {
+  setSearchResult: (data: SearchList) => void
+}
+
+export const useYoutubeStore = create<State & Actions>((set) => ({
+  searchResult: {
+    etag: '',
+    items: [],
+    kind: '',
+    nextPageToken: '',
+    regionCode: '',
+  },
+  setSearchResult: (data: SearchList) => set(state => ({ ...state, searchResult: data }))
 }))
