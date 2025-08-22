@@ -1,11 +1,9 @@
 import { YoutubeType } from "@/app/hook/useYoutubeStore";
-import React from "react";
 
 function YoutubePlayer({ info }: { info: YoutubeType }) {
   const id = info.id?.videoId;
-  const { title, channelTitle } = info.snippet || {};
+  const { title } = info.snippet || {};
 
-  if (!id) return;
   return (
     <div className='flex items-center flex-col p-4 hover:bg-gray-400 transition-colors duration-300 rounded-2xl mb-4'>
       <iframe

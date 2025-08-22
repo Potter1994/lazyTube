@@ -1,10 +1,35 @@
 import { create } from 'zustand'
 
+type Thumbnail = { url: string; width: number; height: number }
+
+type Thumbnails = {
+  default: Thumbnail;
+  high: Thumbnail;
+  medium: Thumbnail;
+}
+
 export type YoutubeType = {
   etag?: string,
   id?: { kind: string, channelId?: string, videoId?: string },
   kind?: string,
-  snippet?: Record<string, string | object>
+  snippet?: {
+    title?: string;
+    description?: string;
+    publishedAt?: string;
+    channelTitle?: string;
+    thumbnails?: Thumbnails;
+    customUrl?: string,
+  };
+}
+
+export type YoutubeChannelType = Omit<YoutubeType, 'id'> & {
+  id: string,
+  statistics: {
+    viewCount: string,
+    subscriberCount: string,
+    hiddenSubscriberCount: boolean,
+    videoCount: string
+  }
 }
 
 type SearchList = {

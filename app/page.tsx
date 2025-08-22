@@ -1,15 +1,15 @@
-"use client";
-import PlayList from "@/app/components/youtube/play-list";
+// "use client";
+// import PlayList from "@/app/components/youtube/play-list";
 
-import { useYoutubeStore } from "./hook/useYoutubeStore";
+// import { useYoutubeStore } from "./hook/useYoutubeStore";
 
 export default function Home() {
-  const searchResult = useYoutubeStore((state) => state.searchResult);
+  // const searchResult = useYoutubeStore((state) => state.searchResult);
   // const videoId = searchResult.items[1].id!.videoId;
   // console.log(searchResult.items[1].id!.videoId);
   return (
     <div>
-      <PlayList list={searchResult.items} />
+      {/* <PlayList list={searchResult.items} /> */}
       {/* <iframe
         width='430'
         height='244'
