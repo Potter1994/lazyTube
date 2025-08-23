@@ -1,42 +1,26 @@
 "use client";
 
-import { useYoutubeStore } from "@/app/hook/useYoutubeStore";
-import { searchVideoList } from "@/app/lib/action";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 function SearchBar() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const setSearchResult = useYoutubeStore((state) => state.setSearchResult);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    async function handleFirstRender() {
-      if (searchParams.get("query")) {
-        const query = decodeURIComponent(searchParams.get("query") || "");
-        const formData = new FormData();
-        formData.set("search", query);
-        const result = await searchVideoList(formData);
-        setSearchResult(result);
-      }
-    }
-    handleFirstRender();
-  }, []);
   return (
     <form
       onSubmit={async (e) => {
         e.preventDefault();
-        const result = await searchVideoList(new FormData(e.currentTarget));
-        setSearchResult(result);
         const params = new URLSearchParams(searchParams);
 
         if (inputRef.current) {
           params.set("query", inputRef.current.value);
         }
 
-        router.push(`/result?${decodeURIComponent(params.toString())}`);
+        // 直接 router 控制路徑，渲染頁面交給導向路徑自己去做 render
+        router.push(`/result?${params.toString()}`);
       }}
       className='max-w-[640px] w-full h-10 flex'>
       <input

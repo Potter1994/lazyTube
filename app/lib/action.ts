@@ -18,22 +18,29 @@ export async function getPlayList() {
 
 export async function searchVideoList(formData: FormData) {
   const queryString = formData.get('search')
-  const response = await fetch(`${youtubeV3Api}/search?key=${apiKey}&q=${queryString}&part=snippet&maxResults=20`)
+  const url = `${youtubeV3Api}/search?key=${apiKey}&q=${queryString}&part=snippet&maxResults=20`
+  const response = await fetch(url)
   const data = await response.json()
 
   return data
 }
 
 export async function getChannelById(id: string) {
-  const response = await fetch(`${youtubeV3Api}/channels?key=${apiKey}&id=${id}&part=snippet,statistics`)
+  const url = `${youtubeV3Api}/channels?key=${apiKey}&id=${id}&part=snippet,statistics`
+  const response = await fetch(url)
   const data = await response.json()
 
   return data.items[0]
 }
 
 export async function getChannelSections(channelId: string) {
-  const response = await fetch(`${youtubeV3Api}/channelSections?key=${apiKey}&channelId=${channelId}&part=contentDetails`)
+  const url = `${youtubeV3Api}/channelSections?key=${apiKey}&channelId=${channelId}&part=contentDetails`
+  const response = await fetch(url)
   const data = await response.json()
 
   return data
 }
+
+// export async function getPlayListItems(playListId) {
+
+// }
