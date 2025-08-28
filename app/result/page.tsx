@@ -1,34 +1,40 @@
 "use client";
 
-import React, { useEffect } from "react";
-import PlayList from "../components/youtube/play-list";
+import React, { useCallback, useRef, useState } from "react";
 import { useYoutubeStore } from "../hook/useYoutubeStore";
-import { searchVideoList } from "../lib/action";
 import { useSearchParams } from "next/navigation";
+import PlayList from "../components/youtube/play-list";
+import useYoutubeSearch from "../hook/useYoutubeSearch";
 
 function Page() {
+  const [pageToken, setPageToken] = useState<string>();
+  const observer = useRef<IntersectionObserver>(null);
   const searchParams = useSearchParams();
-  const searchResult = useYoutubeStore((state) => state.searchResult);
-  const setSearchResult = useYoutubeStore((state) => state.setSearchResult);
-  console.log(searchResult);
+  const { searchResult } = useYoutubeStore();
+  const { isLoading } = useYoutubeSearch({
+    query: searchParams.get("query") || undefined,
+    pageToken: pageToken,
+  });
 
-  // 這邊讓頁面根據 query string 去做抓取資料的動作
-  useEffect(() => {
-    async function handleFirstRender() {
-      if (searchParams.get("query")) {
-        const query = decodeURIComponent(searchParams.get("query") || "");
-        const formData = new FormData();
-        formData.set("search", query);
-        const result = await searchVideoList(formData);
-        setSearchResult(result);
-      }
-    }
-    handleFirstRender();
-  }, [setSearchResult, searchParams]);
+  const loadMoreElementRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (isLoading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          setPageToken(searchResult.nextPageToken);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isLoading, searchResult]
+  );
 
   return (
     <div>
+      {/* <MobileYoutubeList /> */}
       <PlayList list={searchResult.items} />
+      <div ref={loadMoreElementRef} className='bottom h-1 w-full' />
     </div>
   );
 }

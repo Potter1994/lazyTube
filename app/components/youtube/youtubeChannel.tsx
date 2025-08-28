@@ -1,11 +1,11 @@
 "use client";
 
-import { YoutubeChannelType, YoutubeType } from "@/app/hook/useYoutubeStore";
+import { YoutubeChannelType, SearchType } from "@/app/hook/useYoutubeStore";
 import { getChannelById, getChannelSections } from "@/app/lib/action";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-function YoutubeChannel({ info }: { info: YoutubeType }) {
+function YoutubeChannel({ info }: { info: SearchType }) {
   const [channel, setChannel] = useState<YoutubeChannelType | null>(null);
 
   useEffect(() => {

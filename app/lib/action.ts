@@ -16,13 +16,27 @@ export async function getPlayList() {
   return data
 }
 
-export async function searchVideoList(formData: FormData) {
-  const queryString = formData.get('search')
-  const url = `${youtubeV3Api}/search?key=${apiKey}&q=${queryString}&part=snippet&maxResults=20`
+export async function searchVideoList({ search = '', pageToken = '' }: { search?: string, pageToken?: string }) {
+  const url = `${youtubeV3Api}/search?key=${apiKey}&q=${search}&part=snippet&maxResults=20${pageToken ? `&pageToken=${pageToken}` : ''}`
   const response = await fetch(url)
   const data = await response.json()
 
   return data
+}
+
+export async function getVideoInfo(videoIdList: string[]) {
+  const separateCommaString = videoIdList.join()
+  const url = `${youtubeV3Api}/videos?key=${apiKey}&part=statistics&id=${separateCommaString}`
+  const response = await fetch(url)
+  const data = await response.json()
+  const hashTableById = data.items.reduce((prev: Record<string, string | Record<string, string>>, curr: { id: string, statistics: { viewCount: string } }) => {
+    if (curr.id) {
+      prev[curr.id] = curr.statistics;
+    }
+    return prev
+  }, {})
+
+  return hashTableById
 }
 
 export async function getChannelById(id: string) {
@@ -41,6 +55,10 @@ export async function getChannelSections(channelId: string) {
   return data
 }
 
-// export async function getPlayListItems(playListId) {
+export async function getPlayListItems(playListId: string) {
+  const url = `${youtubeV3Api}/playlistItems?key=${apiKey}&playlistId=${playListId}&maxResults=20&part=snippet,contentDetails`
+  const response = await fetch(url)
+  const data = await response.json()
 
-// }
+  return data
+}
