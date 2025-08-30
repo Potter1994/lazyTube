@@ -9,7 +9,7 @@ function PlayList({ list }: { list: SearchType[] }) {
     <div className='mx-auto grid grid-cols-4'>
       {!!list?.length &&
         list.map((i: SearchType, idx: number) => {
-          if (i.id?.channelId) return <></>;
+          if (i.id?.channelId) return null;
           // return <YoutubeChannel key={i.id?.channelId} info={i} />;
           return (
             <YoutubePlayer
