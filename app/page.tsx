@@ -1,51 +1,50 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { socket } from "../socket";
+import { useEffect, useRef, useState } from "react";
+import { io, Socket } from "socket.io-client";
+// import { socket } from "../socket";
 
 export default function Home() {
-  const [isConnected, setIsConnected] = useState(false);
-  const [transport, setTransport] = useState("N/A");
+  const [userId, setUserId] = useState();
+  const socketRef = useRef<Socket>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
+  // console.log(socket.io.engine);
   useEffect(() => {
-    if (socket.connected) {
-      onConnect();
-    }
+    socketRef.current = io("http://localhost:4000");
 
-    function onConnect() {
-      setIsConnected(true);
-      setTransport(socket.io.engine.transport.name);
-
-      socket.io.engine.on("upgrade", (transport) => {
-        setTransport(transport.name);
-      });
-    }
-
-    function onDisconnect() {
-      setIsConnected(false);
-      setTransport("N/A");
-    }
-
-    socket.on("connect", onConnect);
-    socket.on("message", (event) => {
-      console.log("xxx =", event);
+    socketRef.current.on("userId", (userId) => {
+      setUserId(userId);
     });
-    socket.on("disconnect", onDisconnect);
-    setTimeout(() => {
-      socket.send("我從前端發送");
-    }, 1000);
 
     return () => {
-      socket.off("connect", onConnect);
-      socket.off("message");
-      socket.off("disconnect", onDisconnect);
+      socketRef.current?.off("userId");
     };
   }, []);
 
+  useEffect(() => {
+    function handleKeydown(e: KeyboardEvent) {
+      socketRef.current?.emit(userId || "", e.key);
+    }
+
+    document.addEventListener("keydown", handleKeydown);
+    socketRef.current?.on(`${userId}`, (response) => {
+      console.log(response);
+    });
+
+    return () => {
+      document.removeEventListener("keydown", handleKeydown);
+      socketRef.current?.off(`${userId}`);
+    };
+  }, [userId]);
+
   return (
-    <div>
-      <p>Status: {isConnected ? "connected" : "disconnected"}</p>
-      <p>Transport: {transport}</p>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        socketRef.current?.emit(userId || "", inputRef.current?.value);
+      }}>
+      <input ref={inputRef} type='text' className='bg-white text-black' />
       {/* <PlayList list={searchResult.items} /> */}
       {/* <iframe
         width='430'
@@ -56,6 +55,6 @@ export default function Home() {
         allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
         allowFullScreen
       /> */}
-    </div>
+    </form>
   );
 }

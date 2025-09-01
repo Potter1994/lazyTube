@@ -10,15 +10,23 @@ const handler = app.getRequestHandler();
 
 app.prepare().then(() => {
   const httpServer = createServer(handler);
-
   const io = new Server(4000, { cors: { origin: "*" } });
 
+  const userSocketMap = new Map();
+
   io.on("connection", (socket) => {
-    // console.log(socket);
-    console.log("連接上啦");
-    socket.on("message", (message) => {
-      console.log("received: &s", message);
-      socket.send(`我從 server 發送的: ${message}`);
+    console.log(`使用者連線: ${socket.id}`);
+
+    socket.emit("userId", socket.id);
+
+    socket.on(socket.id, (param) => {
+      console.log(param);
+      socket.emit(socket.id, `Server send: ${param}`);
+    });
+
+    socket.on("disconnect", () => {
+      console.log(`使用者斷線: ${socket.id}`);
+      userSocketMap.delete(socket.id);
     });
   });
 
